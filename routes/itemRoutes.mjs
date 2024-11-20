@@ -7,11 +7,11 @@ const router = express.Router();
 router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 
 // // Update & Delete
-// router
-//   .route("/:id")
-//   .put(itemCTRL.updateOneItem)
-//   .delete(itemCTRL.deleteOneItem)
-//   .get(itemCTRL.getOneItem);
+router
+  .route("/:id")
+  .put(itemCTRL.updateOneItem)
+  .delete(itemCTRL.deleteOneItem)
+  .get(itemCTRL.getOneItem);
 
 // router.route("/seed").get(itemCTRL.seedDB);
 
