@@ -4,6 +4,7 @@ import connectDB from "./config/db.mjs";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import itemRoutes from "./routes/itemRoutes.mjs"
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(morgan("tiny"));
 app.get("/", (req, res) => res.send("API Running"));
 
 //Define Routes
+app.use("/api/items", itemRoutes);
 
 // Environmental Variables
 const PORT = process.env.PORT || 3000;
