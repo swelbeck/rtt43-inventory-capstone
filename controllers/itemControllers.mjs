@@ -1,4 +1,4 @@
-import initialItems from "../data/data.mjs";
+import initialData from "../data/data.mjs";
 import Item from "../models/itemSchema.mjs";
 
 // CREATE
@@ -84,7 +84,7 @@ async function seedDB(req, res) {
   try {
     await Item.deleteMany({});
 
-    await Item.create(initialItems);
+    await Item.create(initialData.initialItems);
 
     res.json({ msg: "DB seeded" });
   } catch (error) {

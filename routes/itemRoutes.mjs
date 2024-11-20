@@ -3,6 +3,9 @@ import itemCTRL from "../controllers/itemControllers.mjs";
 
 const router = express.Router();
 
+// Seed Route
+// router.route("/seed").get(itemCTRL.seedDB);
+
 // Create & Read
 router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 
@@ -13,6 +16,6 @@ router
   .delete(itemCTRL.deleteOneItem)
   .get(itemCTRL.getOneItem);
 
-// router.route("/seed").get(itemCTRL.seedDB);
+
 
 export default router;

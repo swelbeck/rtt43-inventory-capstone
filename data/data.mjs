@@ -4,4 +4,11 @@ const initialItems = [
   { name: "Sneakers", category: "clothes", quantity: 1 },
 ];
 
-export default initialItems;
+const defaultCategories = [
+  { name: "clothes", isDefault: true },
+  { name: "groceries", isDefault: true },
+  { name: "household", isDefault: true },
+  { name: "misc", isDefault: true },
+];
+
+export default { initialItems, defaultCategories };
