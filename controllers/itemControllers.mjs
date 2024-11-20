@@ -14,7 +14,7 @@ async function createItem(req, res) {
     res.json({ newItem });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res.status(500).json({ msg: `Server Error - could not create new item` });
   }
 }
 
@@ -28,7 +28,9 @@ async function getAllItems(req, res) {
     res.json(allItems);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res
+      .status(500)
+      .json({ msg: `Server Error - could not retrieve all items` });
   }
 }
 
@@ -41,7 +43,7 @@ async function getOneItem(req, res) {
     res.json(oneItem);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res.status(500).json({ msg: `Server Error - could not retrieve item` });
   }
 }
 
@@ -61,7 +63,7 @@ async function updateOneItem(req, res) {
     res.json(updatedItem);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res.status(500).json({ msg: `Server Error - could not update item` });
   }
 }
 
@@ -75,7 +77,7 @@ async function deleteOneItem(req, res) {
     res.json(deletedItem);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res.status(500).json({ msg: `Server Error - could not delete item` });
   }
 }
 
@@ -86,7 +88,7 @@ async function seedDB(req, res) {
 
     await Item.create(initialData.initialItems);
 
-    res.json({ msg: "DB seeded" });
+    res.json({ msg: "Item DB seeded" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: `Server Error - could not seed database` });

@@ -12,4 +12,11 @@ router
   .post(categoryCTRL.createCategory)
   .get(categoryCTRL.getAllCategories);
 
+// Update & Delete
+router
+  .route("/:id")
+  .get(categoryCTRL.getOneCategory)
+  .put(categoryCTRL.updateOneCategory)
+  .delete(categoryCTRL.deleteOneCategory);
+
 export default router;

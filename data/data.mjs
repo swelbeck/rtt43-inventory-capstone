@@ -5,10 +5,10 @@ const initialItems = [
 ];
 
 const defaultCategories = [
-  { name: "clothes", isDefault: true },
-  { name: "groceries", isDefault: true },
-  { name: "household", isDefault: true },
-  { name: "misc", isDefault: true },
+  { name: "Clothes", isDefault: true },
+  { name: "Groceries", isDefault: true },
+  { name: "Household", isDefault: true },
+  { name: "Misc", isDefault: true },
 ];
 
 export default { initialItems, defaultCategories };

@@ -3,10 +3,19 @@ import Category from "../models/categorySchema.mjs";
 
 // CREATE
 async function createCategory(req, res) {
+  const { name } = req.body;
   try {
-    
+
+    if (!name) {
+      return res.status(400).json({ msg: "Category name is required." });
+    }
+
+    const existingCategory = await Category.findOne({ name });
+    if (existingCategory) {
+      return res.status(400).json({ msg: `Category already exists.` });
+    }
     // Create a new category object
-    let newCategory = new Category(req.body);
+    let newCategory = new Category({ name, isDefault: false });
 
     // Save new object to DB
     await newCategory.save();
@@ -15,7 +24,7 @@ async function createCategory(req, res) {
     res.json({ newCategory });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res.status(500).json({ msg: `Error adding new category` });
   }
 }
 
@@ -29,7 +38,60 @@ async function getAllCategories(req, res) {
     res.json(allCategories);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: `Server Error` });
+    res
+      .status(500)
+      .json({ msg: `Server Error - could not retrieve all categories` });
+  }
+}
+
+async function getOneCategory(req, res) {
+  try {
+    // Find one category by ID from DB
+    let oneCategory = await Category.findById(req.params.id);
+
+    // Return results
+    res.json(oneCategory);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ msg: `Server Error - could not find category in DB` });
+  }
+}
+
+// UPDATE
+async function updateOneCategory(req, res) {
+  try {
+    let id = req.params.id;
+    let category = req.body;
+
+    // Update one category by ID
+    let updatedCategory = await Category.findByIdAndUpdate(id, category, {
+      new: true,
+    });
+
+    // Return results
+    res.json(updatedCategory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: `Server Error - could not update category` });
+  }
+}
+
+// DELETE
+async function deleteOneCategory(req, res) {
+  try {
+    // Delete one category from DB by ID
+    let deletedCategory = await Category.findByIdAndDelete(
+      req.params.id,
+      req.body
+    );
+
+    // Return results
+    res.json(deletedCategory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: `Server Error - could not delete category` });
   }
 }
 
@@ -40,11 +102,18 @@ async function seedCategoryDB(req, res) {
 
     await Category.create(defaultData.defaultCategories);
 
-    res.json({ msg: "DB seeded" });
+    res.json({ msg: "Category DB seeded" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: `Server Error - could not seed database` });
   }
 }
 
-export default { createCategory, getAllCategories, seedCategoryDB };
+export default {
+  createCategory,
+  getAllCategories,
+  getOneCategory,
+  updateOneCategory,
+  deleteOneCategory,
+  seedCategoryDB,
+};
