@@ -9,6 +9,8 @@ const router = express.Router();
 // Create & Read
 router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 
+router.route("/category/:category").get(itemCTRL.getItemsByCategory)
+
 // // Update & Delete
 router
   .route("/:id")

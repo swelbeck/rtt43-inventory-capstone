@@ -47,6 +47,28 @@ async function getOneItem(req, res) {
   }
 }
 
+async function getItemsByCategory(req, res) {
+  const { category } = req.params;
+  try {
+    // Find items by category from DB
+    let itemsByCategory = await Item.find({ category: category });
+
+    // Return results
+    if (itemsByCategory.length === 0) {
+      return res
+        .status(404)
+        .json({ msg: `No items found for category: ${category}` });
+    }
+
+    res.json(itemsByCategory);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ msg: `Server Error - could not retrieve items by category` });
+  }
+}
+
 // UPDATE
 async function updateOneItem(req, res) {
   try {
@@ -99,6 +121,7 @@ export default {
   createItem,
   getAllItems,
   getOneItem,
+  getItemsByCategory,
   updateOneItem,
   deleteOneItem,
   seedDB,
