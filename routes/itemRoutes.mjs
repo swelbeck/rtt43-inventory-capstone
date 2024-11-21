@@ -12,10 +12,8 @@ router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 // // Update & Delete
 router
   .route("/:id")
+  .get(itemCTRL.getOneItem)
   .put(itemCTRL.updateOneItem)
-  .delete(itemCTRL.deleteOneItem)
-  .get(itemCTRL.getOneItem);
-
-
+  .delete(itemCTRL.deleteOneItem);
 
 export default router;
