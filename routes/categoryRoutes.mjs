@@ -12,6 +12,8 @@ router
   .post(categoryCTRL.createCategory)
   .get(categoryCTRL.getAllCategories);
 
+router.route("/exists/:name").get(categoryCTRL.checkCategoryExists);
+
 // Update & Delete
 router
   .route("/:id")

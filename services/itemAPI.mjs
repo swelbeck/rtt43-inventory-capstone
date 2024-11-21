@@ -25,4 +25,4 @@ async function fetchItems(req, res) {
   }
 }
 
-export default { fetchItems,  };
+export default { fetchItems };

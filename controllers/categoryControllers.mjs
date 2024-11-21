@@ -3,9 +3,10 @@ import Category from "../models/categorySchema.mjs";
 
 // CREATE
 async function createCategory(req, res) {
-  const { name } = req.body;
-  try {
 
+  const { name } = req.body;
+
+  try {
     if (!name) {
       return res.status(400).json({ msg: "Category name is required." });
     }
@@ -29,6 +30,24 @@ async function createCategory(req, res) {
 }
 
 // READ
+
+// Check if a category exists
+async function checkCategoryExists(req, res) {
+  try {
+    const { name } = req.params;
+    const category = await Category.findOne({ name });
+
+    if (category) {
+      return res.status(200).json({ exists: true });
+    }
+    res.status(200).json({ exists: false });
+  } catch (error) {
+    console.error("Error checking category existence:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+}
+
+
 async function getAllCategories(req, res) {
   try {
     // Find ALL {} categories in DB
@@ -111,6 +130,7 @@ async function seedCategoryDB(req, res) {
 
 export default {
   createCategory,
+  checkCategoryExists,
   getAllCategories,
   getOneCategory,
   updateOneCategory,
