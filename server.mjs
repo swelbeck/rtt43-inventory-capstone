@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import connectDB from "./config/db.mjs";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -17,9 +16,8 @@ const app = express();
 connectDB();
 
 // Initialize middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ extended: true }));
-app.use(express.json({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("tiny"));
 
@@ -30,6 +28,10 @@ app.get("/", (req, res) => res.send("API is Running"));
 app.use("/api/items", itemRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/search", apiRoutes);
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`, req.body);
+  next();
+});
 
 // Environmental Variables
 const PORT = process.env.PORT || 3001;

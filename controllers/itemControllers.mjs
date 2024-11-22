@@ -1,22 +1,20 @@
 import initialData from "../data/data.mjs";
 import Item from "../models/itemSchema.mjs";
+import Category from "../models/categorySchema.mjs";
 
 // CREATE
 async function createItem(req, res) {
-  // const categoryExists = await Category.findOne({ name: req.body.category });
-
-  // if (!categoryExists) {
-  //   return res.status(400).json({ msg: "Invalid category" });
-  // }
-
   try {
-    if (!req.body.category || req.body.category.trim() === "") {
-      return res.status(400).json({ msg: "Category is required." });
-    }
+    const category = req.body.category?.trim() || "Uncategorized";
+    const newItemData = {
+      ...req.body,
+      category,
+    };
 
     // Create a new item object
-    let newItem = new Item(req.body);
-    console.log(req.body);
+    let newItem = new Item(newItemData);
+    console.log("Saving new item to DB:", newItem);
+
     // Save new object to DB
     await newItem.save();
 
