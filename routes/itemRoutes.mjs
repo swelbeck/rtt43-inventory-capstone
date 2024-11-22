@@ -9,9 +9,12 @@ const router = express.Router();
 // Create & Read
 router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 
-router.route("/category/:category").get(itemCTRL.getItemsByCategory)
+router.route("/category/:category").get(itemCTRL.getItemsByCategory);
 
-// // Update & Delete
+// Update & Delete
+
+router.route("/:id/toggle-shopping").put(itemCTRL.toggleShoppingListStatus);
+
 router
   .route("/:id")
   .get(itemCTRL.getOneItem)

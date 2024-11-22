@@ -89,6 +89,27 @@ async function updateOneItem(req, res) {
   }
 }
 
+// toggle shopping list
+async function toggleShoppingListStatus(req, res) {
+  const { id } = req.params;
+
+  try {
+    const item = await Item.findById(id);
+
+    if (!item) {
+      return res.status(404).json({ msg: "Item not found" });
+    }
+
+    item.addedToShoppingList = !item.addedToShoppingList;
+    await item.save();
+
+    res.json(item);
+  } catch (error) {
+    console.error("Error toggling shopping list status:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+}
+
 // DELETE
 async function deleteOneItem(req, res) {
   try {
@@ -123,6 +144,7 @@ export default {
   getOneItem,
   getItemsByCategory,
   updateOneItem,
+  toggleShoppingListStatus,
   deleteOneItem,
   seedDB,
 };
