@@ -3,6 +3,12 @@ import Item from "../models/itemSchema.mjs";
 
 // CREATE
 async function createItem(req, res) {
+  // const categoryExists = await Category.findOne({ name: req.body.category });
+  
+  // if (!categoryExists) {
+  //   return res.status(400).json({ msg: "Invalid category" });
+  // }
+
   try {
     // Create a new item object
     let newItem = new Item(req.body);
