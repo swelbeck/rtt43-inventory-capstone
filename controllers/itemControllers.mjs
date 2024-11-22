@@ -4,15 +4,19 @@ import Item from "../models/itemSchema.mjs";
 // CREATE
 async function createItem(req, res) {
   // const categoryExists = await Category.findOne({ name: req.body.category });
-  
+
   // if (!categoryExists) {
   //   return res.status(400).json({ msg: "Invalid category" });
   // }
 
   try {
+    if (!req.body.category || req.body.category.trim() === "") {
+      return res.status(400).json({ msg: "Category is required." });
+    }
+
     // Create a new item object
     let newItem = new Item(req.body);
-
+    console.log(req.body);
     // Save new object to DB
     await newItem.save();
 
@@ -75,6 +79,19 @@ async function getItemsByCategory(req, res) {
   }
 }
 
+async function getItemsByStatus(req, res) {
+  const { shoppingStatus } = req.params;
+
+  try {
+    const items = await Item.find({ shoppingStatus });
+
+    res.json(items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error fetching items by status" });
+  }
+}
+
 // UPDATE
 async function updateOneItem(req, res) {
   try {
@@ -106,7 +123,10 @@ async function toggleShoppingListStatus(req, res) {
       return res.status(404).json({ msg: "Item not found" });
     }
 
-    item.addedToShoppingList = !item.addedToShoppingList;
+    // Set shopping status
+    item.shoppingStatus =
+      item.shoppingStatus === "shopping" ? "bought" : "shopping";
+
     await item.save();
 
     res.json(item);
@@ -149,6 +169,7 @@ export default {
   getAllItems,
   getOneItem,
   getItemsByCategory,
+  getItemsByStatus,
   updateOneItem,
   toggleShoppingListStatus,
   deleteOneItem,

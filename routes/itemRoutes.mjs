@@ -12,13 +12,13 @@ router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 router.route("/category/:category").get(itemCTRL.getItemsByCategory);
 
 // Update & Delete
-
-router.route("/:id/toggle-shopping").put(itemCTRL.toggleShoppingListStatus);
-
 router
   .route("/:id")
   .get(itemCTRL.getOneItem)
   .put(itemCTRL.updateOneItem)
   .delete(itemCTRL.deleteOneItem);
+
+
+router.route("/:id/toggle-shopping").put(itemCTRL.toggleShoppingListStatus);
 
 export default router;
