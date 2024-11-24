@@ -18,8 +18,6 @@ router
   .put(itemCTRL.updateOneItem)
   .delete(itemCTRL.deleteOneItem);
 
-
-
 router.route("/:id/toggle-shopping").put(itemCTRL.toggleShoppingListStatus);
 
 export default router;

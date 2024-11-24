@@ -1,6 +1,5 @@
 import initialData from "../data/data.mjs";
 import Item from "../models/itemSchema.mjs";
-import Category from "../models/categorySchema.mjs";
 
 // CREATE
 async function createItem(req, res) {
@@ -100,7 +99,6 @@ async function updateOneItem(req, res) {
     let updatedItem = await Item.findByIdAndUpdate(id, item, {
       new: true,
     });
-    // {new: true} - sends back the newly updated data to the front end
 
     // Return results
     res.json(updatedItem);
