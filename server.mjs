@@ -28,10 +28,7 @@ app.get("/", (req, res) => res.send("API is Running"));
 app.use("/api/items", itemRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/search", apiRoutes);
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url}`, req.body);
-  next();
-});
+
 
 // Environmental Variables
 const PORT = process.env.PORT || 3001;

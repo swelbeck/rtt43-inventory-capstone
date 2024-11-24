@@ -12,10 +12,14 @@ async function createCategory(req, res) {
 
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
-      return res.status(400).json({ msg: `Category already exists.` });
+      return res.status(400).json({ msg: `Category ${name} already exists.` });
     }
     // Create a new category object
-    let newCategory = new Category({ name, isDefault: false });
+    const newCategory = new Category({
+      name,
+      isDefault: false,
+      createdBy: "user",
+    });
 
     // Save new object to DB
     await newCategory.save();
@@ -52,13 +56,17 @@ async function checkCategoryExists(req, res) {
 
 async function getAllCategories(req, res) {
   try {
+    const { createdBy } = req.query;
+
+    const filter = createdBy ? { createdBy } : {};
+
     // Find ALL {} categories in DB
-    let allCategories = await Category.find({});
+    const allCategories = await Category.find(filter);
 
     // Return results
     res.json(allCategories);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching all categories:", error);
     res
       .status(500)
       .json({ msg: `Server Error - could not retrieve all categories` });
@@ -83,18 +91,23 @@ async function getOneCategory(req, res) {
 // UPDATE
 async function updateOneCategory(req, res) {
   try {
-    let id = req.params.id;
-    let category = req.body;
+    const { id } = req.params;
+    const { name, isDefault } = req.body;
 
     // Update one category by ID
-    let updatedCategory = await Category.findByIdAndUpdate(id, category, {
-      new: true,
-    });
+    const updatedCategory = await Category.findByIdAndUpdate(
+      id,
+      { name, isDefault },
+      { new: true }
+    );
 
+    if (!updatedCategory) {
+      return res.status(404).json({ msg: "Category not found" });
+    }
     // Return results
     res.json(updatedCategory);
   } catch (error) {
-    console.error(error);
+    console.error("Error updating category", error);
     res.status(500).json({ msg: `Server Error - could not update category` });
   }
 }
@@ -103,15 +116,19 @@ async function updateOneCategory(req, res) {
 async function deleteOneCategory(req, res) {
   try {
     // Delete one category from DB by ID
-    let deletedCategory = await Category.findByIdAndDelete(
+    const deletedCategory = await Category.findByIdAndDelete(
       req.params.id,
       req.body
     );
 
+    if (!deletedCategory) {
+      return res.status(404).json({ msg: "Category not found" });
+    }
+
     // Return results
     res.json(deletedCategory);
   } catch (error) {
-    console.error(error);
+    console.error("Error deleting category", error);
     res.status(500).json({ msg: `Server Error - could not delete category` });
   }
 }
@@ -119,9 +136,16 @@ async function deleteOneCategory(req, res) {
 // SEED Category DB
 async function seedCategoryDB(req, res) {
   try {
+    // Delete existing entries in DB
     await Category.deleteMany({});
 
-    await Category.create(defaultData.defaultCategories);
+    // Map "system" in createdBy for default categories
+    const defaultCategories = defaultData.defaultCategories.map((cat) => ({
+      ...cat,
+      createdBy: "system",
+    }));
+
+    await Category.create(defaultCategories);
 
     res.json({ msg: "Category DB seeded" });
   } catch (error) {
