@@ -94,6 +94,12 @@ async function updateOneCategory(req, res) {
     const { id } = req.params;
     const { name, isDefault } = req.body;
 
+    // If category is default, it cannot be updated by users
+    const category = await Category.findById(id);
+    if (category && category.createdBy === "system") {
+      return res.status(400).json({ msg: "Cannot edit a default category." });
+    }
+
     // Update one category by ID
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
@@ -115,6 +121,13 @@ async function updateOneCategory(req, res) {
 // DELETE
 async function deleteOneCategory(req, res) {
   try {
+    const category = await Category.findById(req.params.id);
+
+    // if category is default it cannot be deleted by users
+    if (category && category.createdBy === "system") {
+      return res.status(400).json({ msg: "Cannot delete a default category." });
+    }
+
     // Delete one category from DB by ID
     const deletedCategory = await Category.findByIdAndDelete(
       req.params.id,
