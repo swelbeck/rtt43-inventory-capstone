@@ -10,13 +10,22 @@ async function createCategory(req, res) {
       return res.status(400).json({ msg: "Category name is required." });
     }
 
-    const existingCategory = await Category.findOne({ name });
+    const normalizedCategoryName = name.toLowerCase().trim();
+
+    // Check if a category with the same normalized name already exists
+    const existingCategory = await Category.findOne({
+      name: normalizedCategoryName,
+    });
+
     if (existingCategory) {
-      return res.status(400).json({ msg: `Category ${name} already exists.` });
+      return res
+        .status(400)
+        .json({ msg: `Category '${name}' already exists.` });
     }
+
     // Create a new category object
     const newCategory = new Category({
-      name,
+      name: normalizedCategoryName,
       isDefault: false,
       createdBy: "user",
     });
@@ -42,7 +51,10 @@ async function checkCategoryExists(req, res) {
       return res.status(400).json({ msg: "Category name is required." });
     }
 
-    const category = await Category.findOne({ name });
+    const normalizedName = name.toLowerCase().trim();
+
+    const category = await Category.findOne({ normalizedName });
+
     if (category) {
       return res.status(200).json({ exists: true });
     }
@@ -94,6 +106,8 @@ async function updateOneCategory(req, res) {
     const { id } = req.params;
     const { name, isDefault } = req.body;
 
+    const normalizedName = name.toLowerCase().trim();
+
     // If category is default, it cannot be updated by users
     const category = await Category.findById(id);
     if (category && category.createdBy === "system") {
@@ -103,7 +117,7 @@ async function updateOneCategory(req, res) {
     // Update one category by ID
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
-      { name, isDefault },
+      { name: normalizedName, isDefault },
       { new: true }
     );
 
@@ -176,3 +190,4 @@ export default {
   deleteOneCategory,
   seedCategoryDB,
 };
+

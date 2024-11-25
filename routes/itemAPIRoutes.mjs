@@ -1,10 +1,8 @@
 import express from "express";
-import itemAPI from "../services/itemAPI.mjs";
-
+import apiCTRL from "../controllers/itemAPIControllers.mjs";
 const router = express.Router();
 
 // Read
-router.route("/").get(itemAPI.fetchItems);
-
+router.route("/").get(apiCTRL.searchProducts);
 
 export default router;

@@ -4,19 +4,37 @@ import Item from "../models/itemSchema.mjs";
 // CREATE
 async function createItem(req, res) {
   try {
-    const category = req.body.category?.trim() || "Uncategorized";
+    const { name, category } = req.body;
+
+    // Normalize name and category to lowercase for case-insensitive comparison
+    const normalizedName = name.toLowerCase().trim();
+    const normalizedCategory = category
+      ? category.toLowerCase().trim()
+      : "uncategorized";
+
+    // Check if an item with the same name and category already exists
+    const existingItem = await Item.findOne({
+      name: normalizedName,
+      category: normalizedCategory,
+    });
+
+    if (existingItem) {
+      return res
+        .status(400)
+        .json({ msg: "Item already exists in this category." });
+    }
+
     const newItemData = {
       ...req.body,
-      category,
+      name: normalizedName, 
+      category: normalizedCategory, 
     };
 
     // Create a new item object
     let newItem = new Item(newItemData);
-    console.log("Saving new item to DB:", newItem);
 
     // Save new object to DB
     await newItem.save();
-    console.log("Item saved with _id:", newItem._id);
 
     // Return result
     // res.json({ newItem: newItem.toObject() });

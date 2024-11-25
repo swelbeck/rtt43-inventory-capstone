@@ -29,7 +29,6 @@ app.use("/api/items", itemRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/search", apiRoutes);
 
-
 // Environmental Variables
 const PORT = process.env.PORT || 3001;
 
