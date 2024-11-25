@@ -27,6 +27,7 @@ async function createItem(req, res) {
 
 // READ
 async function getAllItems(req, res) {
+  // res.setHeader("Cache-Control", "no-store");
   try {
     // Find ALL {} inventory items from DB
     let allItems = await Item.find({});
@@ -122,7 +123,7 @@ async function toggleShoppingListStatus(req, res) {
     // Set shopping status
     item.shoppingStatus =
       item.shoppingStatus === "shopping" ? "bought" : "shopping";
-
+    // console.log(`Toggling item with id: ${id} to ${item.shoppingStatus}`);
     await item.save();
 
     res.json(item);
