@@ -16,8 +16,10 @@ async function createItem(req, res) {
 
     // Save new object to DB
     await newItem.save();
+    console.log("Item saved with _id:", newItem._id);
 
     // Return result
+    // res.json({ newItem: newItem.toObject() });
     res.json({ newItem });
   } catch (error) {
     console.error(error);
@@ -93,11 +95,15 @@ async function getItemsByStatus(req, res) {
 // UPDATE
 async function updateOneItem(req, res) {
   try {
-    let id = req.params.id;
+    const { id } = req.params;
     let item = req.body;
 
+    if (!id) {
+      return res.status(400).json({ msg: "Item ID is required" });
+    }
+
     // Update item by ID from DB
-    let updatedItem = await Item.findByIdAndUpdate(id, item, {
+    const updatedItem = await Item.findByIdAndUpdate(id, item, {
       new: true,
     });
 
