@@ -1,5 +1,6 @@
 import defaultData from "../data/data.mjs";
 import Category from "../models/categorySchema.mjs";
+import itemCTRL from "./itemControllers.mjs";
 
 // CREATE
 async function createCategory(req, res) {
@@ -162,6 +163,30 @@ async function deleteOneCategory(req, res) {
   }
 }
 
+async function deleteCategoryAndUpdateItem(req, res) {
+  const { categoryId } = req.params;
+
+  try {
+    // 1. Delete the category from the database
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+    if (!deletedCategory) {
+      return res.status(404).json({ msg: "Category not found" });
+    }
+
+    // 2. Update all items in this category to "uncategorized"
+    await itemCTRL.updateItemsCategory(req, res); // Call the above function to update items
+
+    // 3. Respond once the category has been deleted and items updated
+    // return res
+    //   .status(200)
+    //   .json({ msg: "Category deleted and items updated to uncategorized" });
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    res.status(500).json({ msg: "Error deleting category" });
+  }
+}
+
 // SEED Category DB
 async function seedCategoryDB(req, res) {
   try {
@@ -190,5 +215,6 @@ export default {
   getOneCategory,
   updateOneCategory,
   deleteOneCategory,
+  deleteCategoryAndUpdateItem,
   seedCategoryDB,
 };

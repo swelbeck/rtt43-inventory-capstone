@@ -7,12 +7,12 @@ const router = express.Router();
 // router.route("/seed").get(itemCTRL.seedDB);
 
 // Create & Read
-router
-  .route("/")
-  .post(itemCTRL.createItem)
-  .get(itemCTRL.getAllItems);
+router.route("/").post(itemCTRL.createItem).get(itemCTRL.getAllItems);
 
-router.route("/category/:category").get(itemCTRL.getItemsByCategory);
+router
+  .route("/category/:category")
+  .get(itemCTRL.getItemsByCategory)
+  .put(itemCTRL.updateItemsCategory);
 
 // Update & Delete
 router

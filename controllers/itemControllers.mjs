@@ -26,8 +26,8 @@ async function createItem(req, res) {
 
     const newItemData = {
       ...req.body,
-      name: normalizedName, 
-      category: normalizedCategory, 
+      name: normalizedName,
+      category: normalizedCategory,
     };
 
     // Create a new item object
@@ -133,6 +133,24 @@ async function updateOneItem(req, res) {
   }
 }
 
+async function updateItemsCategory(req, res) {
+  const { category } = req.params; 
+  try {
+    // Update all items to "uncategorized" when the category is deleted
+    await Item.updateMany(
+      { category: category }, // Find items with the specified category name
+      { $set: { category: "uncategorized" } } // Update the category field to "uncategorized"
+    );
+    // Only send a response after the update is completed
+    return res.status(200).json({ msg: "Items updated to uncategorized." });
+
+    // res.status(200).json({ msg: "Items updated to uncategorized." });
+  } catch (error) {
+    console.error("Error updating items category:", error);
+    res.status(500).json({ msg: "Error updating items category" });
+  }
+}
+
 // toggle shopping list
 async function toggleShoppingListStatus(req, res) {
   const { id } = req.params;
@@ -192,6 +210,7 @@ export default {
   getItemsByCategory,
   getItemsByStatus,
   updateOneItem,
+  updateItemsCategory,
   toggleShoppingListStatus,
   deleteOneItem,
   seedDB,

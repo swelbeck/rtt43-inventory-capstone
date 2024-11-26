@@ -1,6 +1,7 @@
 import express from "express";
 import categoryCTRL from "../controllers/categoryControllers.mjs";
 
+
 const router = express.Router();
 
 // Seed Route
@@ -14,7 +15,13 @@ router
 
 router.route("/exists/:name").get(categoryCTRL.checkCategoryExists);
 
+
+
 // Update & Delete
+router
+  .route("/category/:categoryId")
+  .delete(categoryCTRL.deleteCategoryAndUpdateItem);
+
 router
   .route("/:id")
   .get(categoryCTRL.getOneCategory)
