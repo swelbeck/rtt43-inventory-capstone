@@ -53,7 +53,9 @@ async function checkCategoryExists(req, res) {
 
     const normalizedName = name.toLowerCase().trim();
 
-    const category = await Category.findOne({ normalizedName });
+    const category = await Category.findOne({
+      name: { $regex: new RegExp("^" + normalizedName + "$", "i") },
+    });
 
     if (category) {
       return res.status(200).json({ exists: true });
@@ -190,4 +192,3 @@ export default {
   deleteOneCategory,
   seedCategoryDB,
 };
-
