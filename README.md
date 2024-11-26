@@ -19,7 +19,27 @@ The back-end integrates with a **MongoDB** database to store item and category d
 - **Axios**: For making external API requests (e.g., to eBay).
 - **Mongoose**: ODM for MongoDB.
 
-## Installation
+## Routes
+| **Route**                         | **Method**  | **Description**                                                                                             |
+|-----------------------------------|-------------|-------------------------------------------------------------------------------------------------------------|
+| `/api/items`                      | `GET`       | Fetch all inventory items.                                                                                   |
+| `/api/items`                      | `POST`      | Create a new inventory item.                                                                                 |
+| `/api/items/:id`                  | `GET`       | Fetch a single item by ID.                                                                                   |
+| `/api/items/:id`                  | `PUT`       | Update an existing item by ID.                                                                               |
+| `/api/items/:id`                  | `DELETE`    | Delete an item by ID.                                                                                        |
+| `/api/items/:id/toggle-shopping`  | `PUT`       | Toggle the shopping status of an item (between shopping and bought).                                         |
+| `/api/categories`                 | `GET`       | Fetch all categories.                                                                                        |
+| `/api/categories`                 | `POST`      | Create a new category.                                                                                       |
+| `/api/categories/exists/:name`    | `GET`       | Check if a category with a given name already exists.                                                        |
+| `/api/categories/:id`             | `GET`       | Fetch a single category by ID.                                                                               |
+| `/api/categories/:id`             | `PUT`       | Update an existing category by ID.                                                                           |
+| `/api/categories/:id`             | `DELETE`    | Delete a category by ID.                                                                                     |
+| `/api/search`                     | `GET`       | Search for products (e.g., from eBay).                                                                       |
+
+- **Seed Routes**:
+  - `/api/items/seed` (GET): Seed the inventory with initial data.
+  - `/api/categories/seed` (GET): Seed categories with default data.
+
 
 ### Back-End Setup
 

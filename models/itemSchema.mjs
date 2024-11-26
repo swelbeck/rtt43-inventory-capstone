@@ -17,6 +17,8 @@ const ItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+ItemSchema.index({ name: 1 });
+
 const Item = mongoose.model("item", ItemSchema);
 
 export default Item;

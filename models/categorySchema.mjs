@@ -9,6 +9,8 @@ const CategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+CategorySchema.index({ name: 1 });
+
 const Category = mongoose.model("category", CategorySchema);
 
 export default Category;
