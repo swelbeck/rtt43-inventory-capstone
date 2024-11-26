@@ -1,6 +1,7 @@
 import defaultData from "../data/data.mjs";
 import Category from "../models/categorySchema.mjs";
 import itemCTRL from "./itemControllers.mjs";
+import Item from "../models/itemSchema.mjs";
 
 // CREATE
 async function createCategory(req, res) {
@@ -127,6 +128,12 @@ async function updateOneCategory(req, res) {
     if (!updatedCategory) {
       return res.status(404).json({ msg: "Category not found" });
     }
+
+    // Update all items that were using the old category name
+    await Item.updateMany(
+      { category: category.name }, // Find items using the old category name
+      { $set: { category: normalizedName } } // Update the category name to the new name
+    );
     // Return results
     res.json(updatedCategory);
   } catch (error) {
@@ -175,12 +182,15 @@ async function deleteCategoryAndUpdateItem(req, res) {
     }
 
     // 2. Update all items in this category to "uncategorized"
-    await itemCTRL.updateItemsCategory(req, res); // Call the above function to update items
+    await Item.updateMany(
+      { category: deletedCategory.name }, // Find all items associated with this category
+      { $set: { category: "uncategorized" } } // Set their category to "uncategorized"
+    );
 
     // 3. Respond once the category has been deleted and items updated
-    // return res
-    //   .status(200)
-    //   .json({ msg: "Category deleted and items updated to uncategorized" });
+    return res
+      .status(200)
+      .json({ msg: "Category deleted and items updated to uncategorized" });
   } catch (error) {
     console.error("Error deleting category:", error);
     res.status(500).json({ msg: "Error deleting category" });
